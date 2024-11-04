@@ -6,8 +6,13 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize,const OAConfig&config):Config
   Stats_.PageSize_=Calculate_Page_Size();
   PageList_=  reinterpret_cast<GenericObject*>(new char[Stats_.PageSize_]);
   FreeList_=  reinterpret_cast<GenericObject*>(reinterpret_cast<char*>(PageList_)+sizeof(GenericObject));
-  
-  
+ 
+  for(size_t i=0; i<Config_.ObjectsPerPage_-1; i++)
+  {
+  GenericObject*NewFreeList_=reinterpret_cast<GenericObject*>(reinterpret_cast<char*>(FreeList_)+Stats_.ObjectSize_);
+  NewFreeList_->Next=FreeList_;
+  FreeList_=NewFreeList_;
+  }
 
 }
 
