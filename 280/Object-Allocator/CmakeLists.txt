@@ -11,7 +11,7 @@ file(GLOB SOURCES *.cpp)
 
 
 # 실행 파일 생성
-add_executable(MyExecutable ${SOURCES})
+add_executable(gnu ${SOURCES})
 
 # 필요에 따라 라이브러리 추가
 # target_link_libraries(MyExecutable my_library)
