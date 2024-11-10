@@ -8,7 +8,6 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
     char *buffer = new char[Stats_.PageSize_];
     PageList_ = reinterpret_cast<GenericObject *>(buffer);
     FreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(PageList_) + sizeof(GenericObject));
-    std::cout << "PageList_ " << PageList_ << '\n';
     for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
     {
         GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
@@ -25,7 +24,7 @@ ObjectAllocator::~ObjectAllocator()
     while (PageList_)
     {
         GenericObject *temp = PageList_->Next;
-        delete[] reinterpret_cast<char *>(PageList_);
+       // delete[] reinterpret_cast<char *>(PageList_);
         PageList_ = temp;
     }
 }
@@ -42,9 +41,8 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
     }
 
     // If we don't have free space it mean our FreeList_ point nullptr
-    else if (Stats_.PagesInUse_ < Config_.MaxPages_)
+    else if (target == nullptr && Stats_.PagesInUse_ < Config_.MaxPages_)
     {
-        // std::cout << "Create New Page " <<Stats_.PageSize_    <<'\n';
         char *buffer = new char[Stats_.PageSize_];
         GenericObject *NewPageList = reinterpret_cast<GenericObject *>(buffer);
         NewPageList->Next = PageList_;
@@ -53,12 +51,19 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
         Stats_.PagesInUse_++;
         for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
         {
+           
+    
             GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
             NewFreeList_->Next = FreeList_;
             FreeList_ = NewFreeList_;
+            
         }
+        std::cout<<Config_.ObjectsPerPage_<<'\n';
+        Stats_.FreeObjects_+=Config_.ObjectsPerPage_;
+
         void *target = reinterpret_cast<void *>(FreeList_);
         FreeList_ = FreeList_->Next;
+        Stats_.FreeObjects_--;
         return target;
     }
     return nullptr;
