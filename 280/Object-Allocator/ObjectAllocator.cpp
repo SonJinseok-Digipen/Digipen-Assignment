@@ -1,5 +1,7 @@
 #include "ObjectAllocator.h"
 #include <iostream>
+#include <cstring>
+#include <cstdint>
 ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Config_(config)
 {
     Stats_.ObjectSize_ = ObjectSize;
@@ -7,7 +9,7 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
 
     // Make Big Size Buffer
     char *buffer = new char[Stats_.PageSize_];
-
+    std::memset(buffer, 0xAA, Stats_.PageSize_);
     // Reinterpret cast first 4 byte GenericObject
     PageList_ = reinterpret_cast<GenericObject *>(buffer);
     PageList_->Next = nullptr;
@@ -21,6 +23,7 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
         GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
         NewFreeList_->Next = FreeList_;
         FreeList_ = NewFreeList_;
+        // std::memset(FreeList_,0xAA,Stats_.ObjectSize_);
     }
     Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
     Stats_.PagesInUse_++;
@@ -45,7 +48,8 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
         Stats_.Allocations_++;
         Stats_.ObjectsInUse_++;
         Stats_.FreeObjects_--;
-
+        Stats_.MostObjects_++;
+        std::memset(target, 0xBB, Stats_.ObjectSize_);
         return target;
     }
     else
@@ -55,7 +59,7 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
             char *buffer = new char[Stats_.PageSize_];
             GenericObject *NewPageList_ = reinterpret_cast<GenericObject *>(buffer);
             NewPageList_->Next = PageList_;
-            PageList_=NewPageList_;
+            PageList_ = NewPageList_;
 
             FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject));
             FreeList_->Next = nullptr;
@@ -74,13 +78,14 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
             Stats_.Allocations_++;
             Stats_.ObjectsInUse_++;
             Stats_.FreeObjects_--;
-
+            Stats_.MostObjects_++;
+            std::memset(target, 0xBB, Stats_.ObjectSize_);
             return target;
         }
 
         else
         {
-          throw OAException(OAException::E_NO_PAGES,"");
+            throw OAException(OAException::E_NO_PAGES, "");
         }
     }
 
@@ -89,25 +94,37 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
 
 void ObjectAllocator::Free([[maybe_unused]] void *Object)
 {
-   if(FreeList_==nullptr)
-   {
-     FreeList_=reinterpret_cast<GenericObject*>(Object);
-     FreeList_->Next=nullptr;
-     Stats_.Deallocations_++;
-     Stats_.ObjectsInUse_--;
-     Stats_.FreeObjects_++;
+    [[maybe_unused]] unsigned char *object = reinterpret_cast<unsigned char *>(Object);
+    if (object[0] == 0xCC)
+    {
+        throw OAException(OAException::E_BAD_BOUNDARY, "");
+    }
 
-   }
-   else
-   {
-        GenericObject*NewFreeList_=reinterpret_cast<GenericObject*>(Object);
-        NewFreeList_->Next=FreeList_;
-        FreeList_=NewFreeList_;
-         Stats_.FreeObjects_++;
+    if (FreeList_ == nullptr)
+    {
+        void *freeListStart = reinterpret_cast<unsigned char *>(PageList_) + sizeof(void *);
+        void *freeListEnd = reinterpret_cast<unsigned char *>(freeListStart) + Stats_.PageSize_;
+        FreeList_ = reinterpret_cast<GenericObject *>(Object);
+        FreeList_->Next = nullptr;
         Stats_.Deallocations_++;
         Stats_.ObjectsInUse_--;
-   }
+        Stats_.FreeObjects_++;
+        void *target = FreeList_;
+        // 메모리가 이미 0xCC로 설정되어 있는지 검사
 
+        std::memset(target, 0xCC, Stats_.ObjectSize_);
+    }
+    else
+    {
+        GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(Object);
+        NewFreeList_->Next = FreeList_;
+
+        std::memset(NewFreeList_, 0xCC, Stats_.ObjectSize_);
+        FreeList_ = NewFreeList_;
+        Stats_.FreeObjects_++;
+        Stats_.Deallocations_++;
+        Stats_.ObjectsInUse_--;
+    }
 }
 
 unsigned ObjectAllocator::DumpMemoryInUse([[maybe_unused]] ObjectAllocator::DUMPCALLBACK fn) const
