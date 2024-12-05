@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial-0", "tutorial-0\tu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_gl", "common_gl\common_gl.vcxproj", "{1DE872D6-81DA-4CA0-B3C9-F7499D275ED5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial-1", "tutorial-1\tutorial-1.vcxproj", "{C68BC73D-0C64-413B-ABB1-C04563C5CBBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{1DE872D6-81DA-4CA0-B3C9-F7499D275ED5}.Debug|x64.Build.0 = Debug|x64
 		{1DE872D6-81DA-4CA0-B3C9-F7499D275ED5}.Release|x64.ActiveCfg = Release|x64
 		{1DE872D6-81DA-4CA0-B3C9-F7499D275ED5}.Release|x64.Build.0 = Release|x64
+		{C68BC73D-0C64-413B-ABB1-C04563C5CBBF}.Debug|x64.ActiveCfg = Debug|x64
+		{C68BC73D-0C64-413B-ABB1-C04563C5CBBF}.Debug|x64.Build.0 = Debug|x64
+		{C68BC73D-0C64-413B-ABB1-C04563C5CBBF}.Release|x64.ActiveCfg = Release|x64
+		{C68BC73D-0C64-413B-ABB1-C04563C5CBBF}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

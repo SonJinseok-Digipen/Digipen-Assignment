@@ -1,52 +1,52 @@
 {
   "main": {
-    "id": "63381b31fe1f3ee5",
+    "id": "4ade35ba2251adbc",
     "type": "split",
     "children": [
       {
-        "id": "4c333df4589ba23e",
+        "id": "e69cf98262135401",
         "type": "tabs",
         "children": [
           {
-            "id": "3efef9413facbe31",
+            "id": "2eb9c7e5bbcd37df",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tutorial0.md",
+                "file": "HookBill-Engine.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tutorial0"
+              "title": "HookBill-Engine"
             }
           },
           {
-            "id": "5fe612ead498fec1",
+            "id": "d323173522e1a72f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tutorial0.md",
+                "file": "HookBill-Engine.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tutorial0"
+              "title": "HookBill-Engine"
             }
           },
           {
-            "id": "a31fd9971d0e2c3f",
+            "id": "799607c54bf54d21",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CS200.md",
+                "file": "Logger.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CS200"
+              "title": "Logger"
             }
           }
         ],
@@ -56,15 +56,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "1df139ce2816e214",
+    "id": "1585d555e9d58e66",
     "type": "split",
     "children": [
       {
-        "id": "e459be320b9f4648",
+        "id": "749d806dbe256f1b",
         "type": "tabs",
         "children": [
           {
-            "id": "b48d1ad2e6d4d55c",
+            "id": "15198b6137b03089",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -76,7 +76,7 @@
             }
           },
           {
-            "id": "9ca227188bbe864c",
+            "id": "2093b6578e45b53f",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -93,7 +93,7 @@
             }
           },
           {
-            "id": "985486d5829d70ee",
+            "id": "afe76f2a8a7c6509",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -109,19 +109,20 @@
     "width": 300
   },
   "right": {
-    "id": "5143f84d34f3ccbe",
+    "id": "687979bf0b94f826",
     "type": "split",
     "children": [
       {
-        "id": "1de52756e7044f00",
+        "id": "fe660bc75cb74245",
         "type": "tabs",
         "children": [
           {
-            "id": "bb3c67d0669096ae",
+            "id": "116cff3533ebbb5a",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
+                "file": "HookBill-Engine.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -131,24 +132,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for HookBill-Engine"
             }
           },
           {
-            "id": "7e92fa22cebd08e6",
+            "id": "65a6fea6b497a633",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "HookBill-Engine.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from HookBill-Engine"
             }
           },
           {
-            "id": "43af41dcf0231d29",
+            "id": "f0eb57fa37fb13c1",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -161,23 +163,23 @@
             }
           },
           {
-            "id": "f85f090e50fc4b8f",
+            "id": "6bc231c851b1acae",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "CS200.md"
+                "file": "HookBill-Engine.md"
               },
               "icon": "lucide-list",
-              "title": "Outline of CS200"
+              "title": "Outline of HookBill-Engine"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 445.5
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -189,11 +191,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "a31fd9971d0e2c3f",
+  "active": "799607c54bf54d21",
   "lastOpenFiles": [
-    "tutorial1.md",
-    "tutorial0.md",
-    "CS200.md",
-    "create a link.md"
+    "HookBill-Engine.md",
+    "Logger.md",
+    "HookBill.md",
+    "HookBill-Physics.md"
   ]
 }

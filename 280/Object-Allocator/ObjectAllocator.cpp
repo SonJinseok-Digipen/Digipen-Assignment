@@ -5,9 +5,17 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
     Stats_.ObjectSize_ = ObjectSize;
     Stats_.PageSize_ = Calculate_Page_Size();
 
+    // Make Big Size Buffer
     char *buffer = new char[Stats_.PageSize_];
+
+    // Reinterpret cast first 4 byte GenericObject
     PageList_ = reinterpret_cast<GenericObject *>(buffer);
-    FreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(PageList_) + sizeof(GenericObject));
+    PageList_->Next = nullptr;
+
+    // Reinterpret cast first 4 byte after PageList
+    FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject));
+    FreeList_->Next = nullptr;
+
     for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
     {
         GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
@@ -20,65 +28,94 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
 
 ObjectAllocator::~ObjectAllocator()
 {
-
     while (PageList_)
     {
         GenericObject *temp = PageList_->Next;
-       // delete[] reinterpret_cast<char *>(PageList_);
+        delete[] reinterpret_cast<char *>(PageList_);
         PageList_ = temp;
     }
 }
 
 void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
 {
-    // If We have extra free space
-    void *target = reinterpret_cast<void *>(FreeList_);
-    if (target != nullptr)
+    if (FreeList_ != nullptr)
     {
+        void *target = FreeList_;
         FreeList_ = FreeList_->Next;
+        Stats_.Allocations_++;
+        Stats_.ObjectsInUse_++;
         Stats_.FreeObjects_--;
+
         return target;
     }
-
-    // If we don't have free space it mean our FreeList_ point nullptr
-    else if (target == nullptr && Stats_.PagesInUse_ < Config_.MaxPages_)
+    else
     {
-        char *buffer = new char[Stats_.PageSize_];
-        GenericObject *NewPageList = reinterpret_cast<GenericObject *>(buffer);
-        NewPageList->Next = PageList_;
-        PageList_ = NewPageList;
-        FreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(PageList_) + sizeof(GenericObject));
-        Stats_.PagesInUse_++;
-        for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
+        if (Stats_.PagesInUse_ < Config_.MaxPages_)
         {
-           
-    
-            GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
-            NewFreeList_->Next = FreeList_;
-            FreeList_ = NewFreeList_;
-            
-        }
-        std::cout<<Config_.ObjectsPerPage_<<'\n';
-        Stats_.FreeObjects_+=Config_.ObjectsPerPage_;
+            char *buffer = new char[Stats_.PageSize_];
+            GenericObject *NewPageList_ = reinterpret_cast<GenericObject *>(buffer);
+            NewPageList_->Next = PageList_;
+            PageList_=NewPageList_;
 
-        void *target = reinterpret_cast<void *>(FreeList_);
-        FreeList_ = FreeList_->Next;
-        Stats_.FreeObjects_--;
-        return target;
+            FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject));
+            FreeList_->Next = nullptr;
+            for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
+            {
+                GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
+                NewFreeList_->Next = FreeList_;
+                FreeList_ = NewFreeList_;
+            }
+            Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
+            Stats_.PagesInUse_++;
+
+            void *target = FreeList_;
+            FreeList_ = FreeList_->Next;
+
+            Stats_.Allocations_++;
+            Stats_.ObjectsInUse_++;
+            Stats_.FreeObjects_--;
+
+            return target;
+        }
+
+        else
+        {
+          throw OAException(OAException::E_NO_PAGES,"");
+        }
     }
+
     return nullptr;
 }
 
-void ObjectAllocator::Free([[maybe_unused]]void *Object)
+void ObjectAllocator::Free([[maybe_unused]] void *Object)
 {
+   if(FreeList_==nullptr)
+   {
+     FreeList_=reinterpret_cast<GenericObject*>(Object);
+     FreeList_->Next=nullptr;
+     Stats_.Deallocations_++;
+     Stats_.ObjectsInUse_--;
+     Stats_.FreeObjects_++;
+
+   }
+   else
+   {
+        GenericObject*NewFreeList_=reinterpret_cast<GenericObject*>(Object);
+        NewFreeList_->Next=FreeList_;
+        FreeList_=NewFreeList_;
+         Stats_.FreeObjects_++;
+        Stats_.Deallocations_++;
+        Stats_.ObjectsInUse_--;
+   }
+
 }
 
-unsigned ObjectAllocator::DumpMemoryInUse([[maybe_unused]]ObjectAllocator::DUMPCALLBACK fn) const
+unsigned ObjectAllocator::DumpMemoryInUse([[maybe_unused]] ObjectAllocator::DUMPCALLBACK fn) const
 {
     return 0;
 }
 
-unsigned ObjectAllocator::ValidatePages([[maybe_unused]]ObjectAllocator::VALIDATECALLBACK fn) const
+unsigned ObjectAllocator::ValidatePages([[maybe_unused]] ObjectAllocator::VALIDATECALLBACK fn) const
 {
     return 0;
 }
@@ -87,7 +124,7 @@ unsigned ObjectAllocator::FreeEmptyPages()
 {
     return 0;
 }
-void ObjectAllocator::SetDebugState([[maybe_unused]]bool State)
+void ObjectAllocator::SetDebugState([[maybe_unused]] bool State)
 {
 }
 
