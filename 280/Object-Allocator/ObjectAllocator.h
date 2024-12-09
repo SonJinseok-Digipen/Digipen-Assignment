@@ -293,12 +293,25 @@ public:
 
 private:
   // Some "suggested" members (only a suggestion!)
-  GenericObject *PageList_=nullptr; //!< the beginning of the list of pages
-  GenericObject *FreeList_=nullptr; //!< the beginning of the list of objects
-  OAStats        Stats_;
-  OAConfig       Config_;
+  GenericObject *PageList_ = nullptr; //!< the beginning of the list of pages
+  GenericObject *FreeList_ = nullptr; //!< the beginning of the list of objects
+  OAStats Stats_;
+  OAConfig Config_;
 
-  // Fucking Important 
+  struct BasicHeader
+  {
+    int AllocationNumber; // 4 bytes: 할당 번호
+    bool Flags;           // 1 byte: flags (free or in-use)
+  };
+
+  struct ExtendedHeader
+  {
+    char UserDefined[5]="";  // 5 bytes
+    short UseCounter;     // 2 bytes
+    int AllocationNumber; // 4 bytes
+    bool Flags;           // 1 byte
+  };
+
   size_t Calculate_Page_Size();
   // Lots of other private stuff...
 };

@@ -15,22 +15,74 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
     PageList_->Next = nullptr;
 
     // Reinterpret cast first 4 byte after PageList
-    FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject)+Config_.PadBytes_);
-    void*FirstPadBytes=reinterpret_cast<char*>(FreeList_)-Config_.PadBytes_;
-    std::memset(FirstPadBytes,0xDD,Config_.PadBytes_);
+    FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject) + Config_.HBlockInfo_.size_ + Config_.PadBytes_);
+    void *FirstPadBytes = reinterpret_cast<char *>(FreeList_) - Config_.PadBytes_;
+    std::memset(FirstPadBytes, 0xDD, Config_.PadBytes_);
+
+    if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+    {
+    }
+    else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+    {
+
+        void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+        std::memset(FirstBlock, 0, Config_.HBlockInfo_.size_);
+        BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+        header->AllocationNumber = 0;
+        header->Flags = false;
+    }
+    else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbExtended)
+    {
+        void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+        std::memset(FirstBlock, 0, Config_.HBlockInfo_.size_);
+        // ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+        // header->AllocationNumber = 0;
+        // header->Flags = false;
+        // header->UseCounter = 0;
+    }
+
     FreeList_->Next = nullptr;
 
     for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
     {
-        GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_+(Config_.PadBytes_*2));
-        void*PadBytes=reinterpret_cast<char*>(NewFreeList_)-(Config_.PadBytes_*2);
-        std::memset(PadBytes,0xDD,Config_.PadBytes_*2);
+        GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Config_.HBlockInfo_.size_ + Stats_.ObjectSize_ + (Config_.PadBytes_ * 2));
+
+        if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+        {
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+        {
+
+            void *FirstBlock = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            std::memset(FirstBlock, 0, Config_.HBlockInfo_.size_);
+            BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+            header->AllocationNumber = Stats_.Allocations_;
+            header->Flags = false;
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbExtended)
+        {
+            void *FirstBlock = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            std::memset(FirstBlock, 0, Config_.HBlockInfo_.size_);
+            ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+            header->AllocationNumber = 0;
+            header->Flags = false;
+            header->UseCounter = 0;
+        }
+
+        void *BackPadBytes = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_);
+        std::memset(BackPadBytes, 0xDD, Config_.PadBytes_);
+
+        void *FrontPadBytes = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_ + Config_.PadBytes_);
+        std::memset(FrontPadBytes, 0xDD, Config_.PadBytes_);
+
         NewFreeList_->Next = FreeList_;
         FreeList_ = NewFreeList_;
         // std::memset(FreeList_,0xAA,Stats_.ObjectSize_);
     }
-    void*PadBytes=reinterpret_cast<char*>(FreeList_)+Stats_.ObjectSize_;
-     std::memset(PadBytes,0xDD,Config_.PadBytes_);
+    void *PadBytes = reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_;
+    std::memset(PadBytes, 0xDD, Config_.PadBytes_);
     Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
     Stats_.PagesInUse_++;
 }
@@ -48,15 +100,39 @@ ObjectAllocator::~ObjectAllocator()
 void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
 {
 
-    if (FreeList_ != nullptr)
+    if (FreeList_!= nullptr)
     {
         void *target = FreeList_;
-        FreeList_ = FreeList_->Next;
+        FreeList_=FreeList_->Next;
         Stats_.Allocations_++;
         Stats_.ObjectsInUse_++;
         Stats_.FreeObjects_--;
         Stats_.MostObjects_++;
         std::memset(target, 0xBB, Stats_.ObjectSize_);
+
+        if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+        {
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+        {
+
+            void *FirstBlock = reinterpret_cast<char *>(target) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+            header->AllocationNumber = Stats_.Allocations_;
+            header->Flags = true;
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbExtended)
+        {
+            // void *FirstBlock = reinterpret_cast<char *>(target) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            // std::memset(FirstBlock, 0, Config_.HBlockInfo_.size_);
+            // ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+            // header->AllocationNumber++;
+            // header->Flags = true;
+            // header->UseCounter++;
+        }
+
         return target;
     }
     else
@@ -68,17 +144,25 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
             NewPageList_->Next = PageList_;
             PageList_ = NewPageList_;
 
-            FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject)+Config_.PadBytes_);
+            FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject) + Config_.HBlockInfo_.size_ + Config_.PadBytes_);
+            void *FirstPadBytes = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            std::memset(FirstPadBytes, 0xDD, Config_.PadBytes_);
             FreeList_->Next = nullptr;
+
             for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
             {
-                GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_+(Config_.PadBytes_*2));
-                void*PadBytes=reinterpret_cast<char*>(NewFreeList_)-(Config_.PadBytes_*2);
-                std::memset(PadBytes,0xDD,Config_.PadBytes_*2);
+                GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_ + Config_.HBlockInfo_.size_ + (Config_.PadBytes_ * 2));
+                void *BackPadBytes = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_);
+                std::memset(BackPadBytes, 0xDD, Config_.PadBytes_);
+
+
+                void *FrontPadBytes = reinterpret_cast<char *>(NewFreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_ + Config_.PadBytes_);
+                std::memset(FrontPadBytes, 0xDD, Config_.PadBytes_);
+
                 NewFreeList_->Next = FreeList_;
                 FreeList_ = NewFreeList_;
             }
-            
+
             Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
             Stats_.PagesInUse_++;
 
@@ -90,6 +174,30 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
             Stats_.FreeObjects_--;
             Stats_.MostObjects_++;
             std::memset(target, 0xBB, Stats_.ObjectSize_);
+
+            if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+            {
+            }
+
+            else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+            {
+
+                void *FirstBlock = reinterpret_cast<char *>(target) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+                BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+                header->AllocationNumber = Stats_.Allocations_;
+                header->Flags = true;
+            }
+
+            else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+            {
+
+                // void *FirstBlock = reinterpret_cast<char *>(target) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+                // ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+                // header->AllocationNumber++;
+                // header->Flags = true;
+                // header->UseCounter++;
+            }
+
             return target;
         }
 
@@ -130,15 +238,14 @@ void ObjectAllocator::Free([[maybe_unused]] void *Object)
     while (page != nullptr)
     {
         unsigned char *pageStart = reinterpret_cast<unsigned char *>(page);
-       [[maybe_unused]] unsigned char *pageEnd = pageStart + Stats_.PageSize_+Config_.PadBytes_;
+        [[maybe_unused]] unsigned char *pageEnd = pageStart + Stats_.PageSize_ + Config_.PadBytes_;
 
         // 페이지 내에서 객체가 올바른 범위에 있는지 확인
         if (reinterpret_cast<unsigned char *>(page) < ptr && ptr < reinterpret_cast<u_char *>(page) + Stats_.PageSize_)
         {
-            unsigned char *blockStart = pageStart + sizeof(void *)+Config_.PadBytes_;
-                                 
-            size_t separation = Stats_.ObjectSize_+(Config_.PadBytes_*2);
-                                
+            unsigned char *blockStart = pageStart + sizeof(void *) + Config_.HBlockInfo_.size_ + Config_.PadBytes_;
+
+            size_t separation = Stats_.ObjectSize_ + Config_.HBlockInfo_.size_ + (Config_.PadBytes_ * 2);
 
             // 객체가 블록 경계에 위치하는지 체크
             if (0 == (ptr - blockStart) % separation)
@@ -155,25 +262,71 @@ void ObjectAllocator::Free([[maybe_unused]] void *Object)
     {
         throw OAException(OAException::E_BAD_BOUNDARY, "Object is not aligned to a block boundary");
     }
-     // FreeList_가 nullptr인 경우 새로운 프리 리스트에 객체 추가
+    // FreeList_가 nullptr인 경우 새로운 프리 리스트에 객체 추가
     if (FreeList_ == nullptr)
     {
         FreeList_ = reinterpret_cast<GenericObject *>(Object);
-        FreeList_->Next = nullptr;
+       // FreeList_->Next = nullptr;
+
+        std::memset(FreeList_, 0xCC, Stats_.ObjectSize_);
         Stats_.Deallocations_++;
         Stats_.ObjectsInUse_--;
         Stats_.FreeObjects_++;
-        std::memset(FreeList_, 0xCC, Stats_.ObjectSize_);
+        if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+        {
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+        {
+
+            void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+            header->AllocationNumber = 0;
+            header->Flags = false;
+        }
+
+         else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+            {
+
+                void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+                ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+                header->AllocationNumber;
+                header->Flags = false;
+                header->UseCounter;
+            }
     }
     else
     {
         GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(Object);
         NewFreeList_->Next = FreeList_;
         std::memset(NewFreeList_, 0xCC, Stats_.ObjectSize_);
+
         FreeList_ = NewFreeList_;
         Stats_.FreeObjects_++;
         Stats_.Deallocations_++;
         Stats_.ObjectsInUse_--;
+
+        if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbNone)
+        {
+        }
+
+        else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+        {
+
+            void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+            BasicHeader *header = reinterpret_cast<BasicHeader *>(FirstBlock);
+            header->AllocationNumber = 0;
+            header->Flags = false;
+        }
+          else if (Config_.HBlockInfo_.type_ == OAConfig::HBLOCK_TYPE::hbBasic)
+            {
+
+                void *FirstBlock = reinterpret_cast<char *>(FreeList_) - (Config_.PadBytes_ + Config_.HBlockInfo_.size_);
+                ExtendedHeader *header = reinterpret_cast<ExtendedHeader *>(FirstBlock);
+                header->AllocationNumber;
+                header->Flags = false;
+                header->UseCounter;
+            }
     }
 }
 
@@ -217,6 +370,7 @@ OAStats ObjectAllocator::GetStats() const
 
 size_t ObjectAllocator::Calculate_Page_Size()
 {
-    size_t total_size = sizeof(GenericObject *) + (Config_.ObjectsPerPage_*2*Config_.PadBytes_)  +         (Config_.ObjectsPerPage_ * Stats_.ObjectSize_);
+    size_t block_size = Config_.HBlockInfo_.size_;
+    size_t total_size = sizeof(GenericObject *) + (Config_.ObjectsPerPage_ * 2 * Config_.PadBytes_) + (Config_.ObjectsPerPage_ * block_size) + (Config_.ObjectsPerPage_ * Stats_.ObjectSize_);
     return total_size;
 }
