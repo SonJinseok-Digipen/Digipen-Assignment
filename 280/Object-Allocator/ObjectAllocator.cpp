@@ -15,16 +15,22 @@ ObjectAllocator::ObjectAllocator(size_t ObjectSize, const OAConfig &config) : Co
     PageList_->Next = nullptr;
 
     // Reinterpret cast first 4 byte after PageList
-    FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject));
+    FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject)+Config_.PadBytes_);
+    void*FirstPadBytes=reinterpret_cast<char*>(FreeList_)-Config_.PadBytes_;
+    std::memset(FirstPadBytes,0xDD,Config_.PadBytes_);
     FreeList_->Next = nullptr;
 
     for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
     {
-        GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
+        GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_+(Config_.PadBytes_*2));
+        void*PadBytes=reinterpret_cast<char*>(NewFreeList_)-(Config_.PadBytes_*2);
+        std::memset(PadBytes,0xDD,Config_.PadBytes_*2);
         NewFreeList_->Next = FreeList_;
         FreeList_ = NewFreeList_;
         // std::memset(FreeList_,0xAA,Stats_.ObjectSize_);
     }
+    void*PadBytes=reinterpret_cast<char*>(FreeList_)+Stats_.ObjectSize_;
+     std::memset(PadBytes,0xDD,Config_.PadBytes_);
     Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
     Stats_.PagesInUse_++;
 }
@@ -62,14 +68,17 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
             NewPageList_->Next = PageList_;
             PageList_ = NewPageList_;
 
-            FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject));
+            FreeList_ = reinterpret_cast<GenericObject *>(buffer + sizeof(GenericObject)+Config_.PadBytes_);
             FreeList_->Next = nullptr;
             for (size_t i = 0; i < Config_.ObjectsPerPage_ - 1; i++)
             {
-                GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_);
+                GenericObject *NewFreeList_ = reinterpret_cast<GenericObject *>(reinterpret_cast<char *>(FreeList_) + Stats_.ObjectSize_+(Config_.PadBytes_*2));
+                void*PadBytes=reinterpret_cast<char*>(NewFreeList_)-(Config_.PadBytes_*2);
+                std::memset(PadBytes,0xDD,Config_.PadBytes_*2);
                 NewFreeList_->Next = FreeList_;
                 FreeList_ = NewFreeList_;
             }
+            
             Stats_.FreeObjects_ += Config_.ObjectsPerPage_;
             Stats_.PagesInUse_++;
 
@@ -121,14 +130,14 @@ void ObjectAllocator::Free([[maybe_unused]] void *Object)
     while (page != nullptr)
     {
         unsigned char *pageStart = reinterpret_cast<unsigned char *>(page);
-       [[maybe_unused]] unsigned char *pageEnd = pageStart + Stats_.PageSize_;
+       [[maybe_unused]] unsigned char *pageEnd = pageStart + Stats_.PageSize_+Config_.PadBytes_;
 
         // 페이지 내에서 객체가 올바른 범위에 있는지 확인
         if (reinterpret_cast<unsigned char *>(page) < ptr && ptr < reinterpret_cast<u_char *>(page) + Stats_.PageSize_)
         {
-            unsigned char *blockStart = pageStart + sizeof(void *);
+            unsigned char *blockStart = pageStart + sizeof(void *)+Config_.PadBytes_;
                                  
-            size_t separation = Stats_.ObjectSize_;
+            size_t separation = Stats_.ObjectSize_+(Config_.PadBytes_*2);
                                 
 
             // 객체가 블록 경계에 위치하는지 체크
@@ -208,6 +217,6 @@ OAStats ObjectAllocator::GetStats() const
 
 size_t ObjectAllocator::Calculate_Page_Size()
 {
-    size_t total_size = sizeof(GenericObject *) + (Config_.ObjectsPerPage_ * Stats_.ObjectSize_);
+    size_t total_size = sizeof(GenericObject *) + (Config_.ObjectsPerPage_*2*Config_.PadBytes_)  +         (Config_.ObjectsPerPage_ * Stats_.ObjectSize_);
     return total_size;
 }
