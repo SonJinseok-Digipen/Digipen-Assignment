@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator
+# Install script for directory: /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

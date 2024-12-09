@@ -144,7 +144,6 @@ void ObjectAllocator::Free([[maybe_unused]] void *Object)
     // 만약 객체가 경계에 맞지 않으면 예외 발생
     if (!onBound)
     {
-        std::cout << "Error: Object not on a block boundary" << std::endl;
         throw OAException(OAException::E_BAD_BOUNDARY, "Object is not aligned to a block boundary");
     }
      // FreeList_가 nullptr인 경우 새로운 프리 리스트에 객체 추가

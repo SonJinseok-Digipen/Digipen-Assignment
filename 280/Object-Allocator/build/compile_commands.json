@@ -1,20 +1,20 @@
 [
 {
-  "directory": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build",
-  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/ObjectAllocator.cpp.o -c /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp",
-  "file": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp",
+  "directory": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build",
+  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/ObjectAllocator.cpp.o -c /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp",
+  "file": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp",
   "output": "CMakeFiles/gnu.dir/ObjectAllocator.cpp.o"
 },
 {
-  "directory": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build",
-  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/PRNG.cpp.o -c /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/PRNG.cpp",
-  "file": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/PRNG.cpp",
+  "directory": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build",
+  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/PRNG.cpp.o -c /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/PRNG.cpp",
+  "file": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/PRNG.cpp",
   "output": "CMakeFiles/gnu.dir/PRNG.cpp.o"
 },
 {
-  "directory": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build",
-  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/driver-sample.cpp.o -c /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp",
-  "file": "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp",
+  "directory": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build",
+  "command": "/usr/bin/g++ -g -std=gnu++17 -o CMakeFiles/gnu.dir/driver-sample.cpp.o -c /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp",
+  "file": "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp",
   "output": "CMakeFiles/gnu.dir/driver-sample.cpp.o"
 }
 ]

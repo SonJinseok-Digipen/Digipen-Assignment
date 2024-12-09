@@ -39,7 +39,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build/
+cmake_ninja_workdir = /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build/
 # =============================================================================
 # Object build statements for EXECUTABLE target gnu
 
@@ -49,19 +49,19 @@ cmake_ninja_workdir = /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build/
 
 build cmake_object_order_depends_target_gnu: phony || CMakeFiles/gnu.dir
 
-build CMakeFiles/gnu.dir/ObjectAllocator.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp || cmake_object_order_depends_target_gnu
+build CMakeFiles/gnu.dir/ObjectAllocator.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/ObjectAllocator.cpp || cmake_object_order_depends_target_gnu
   DEP_FILE = CMakeFiles/gnu.dir/ObjectAllocator.cpp.o.d
   FLAGS = -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/gnu.dir
   OBJECT_FILE_DIR = CMakeFiles/gnu.dir
 
-build CMakeFiles/gnu.dir/PRNG.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/PRNG.cpp || cmake_object_order_depends_target_gnu
+build CMakeFiles/gnu.dir/PRNG.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/PRNG.cpp || cmake_object_order_depends_target_gnu
   DEP_FILE = CMakeFiles/gnu.dir/PRNG.cpp.o.d
   FLAGS = -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/gnu.dir
   OBJECT_FILE_DIR = CMakeFiles/gnu.dir
 
-build CMakeFiles/gnu.dir/driver-sample.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp || cmake_object_order_depends_target_gnu
+build CMakeFiles/gnu.dir/driver-sample.cpp.o: CXX_COMPILER__gnu_unscanned_Debug /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/driver-sample.cpp || cmake_object_order_depends_target_gnu
   DEP_FILE = CMakeFiles/gnu.dir/driver-sample.cpp.o.d
   FLAGS = -g -std=gnu++17
   OBJECT_DIR = CMakeFiles/gnu.dir
@@ -88,7 +88,7 @@ build gnu: CXX_EXECUTABLE_LINKER__gnu_Debug CMakeFiles/gnu.dir/ObjectAllocator.c
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build && /usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -99,7 +99,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build && /usr/bin/cmake --regenerate-during-build -S/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator -B/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build
+  COMMAND = cd /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build && /usr/bin/cmake --regenerate-during-build -S/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator -B/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -115,7 +115,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 #############################################
-# Folder: /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build
+# Folder: /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build
 
 build all: phony gnu
 
@@ -126,14 +126,14 @@ build all: phony gnu
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/CMakeLists.txt /usr/share/cmake-3.28/Modules/CMakeCInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/CMakeLists.txt /usr/share/cmake-3.28/Modules/CMakeCInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/CMakeLists.txt /usr/share/cmake-3.28/Modules/CMakeCInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
+build /mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/CMakeLists.txt /usr/share/cmake-3.28/Modules/CMakeCInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.28/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Compiler/GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.28/Modules/Platform/Linux-Initialize.cmake /usr/share/cmake-3.28/Modules/Platform/Linux.cmake /usr/share/cmake-3.28/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.28.3/CMakeCCompiler.cmake CMakeFiles/3.28.3/CMakeCXXCompiler.cmake CMakeFiles/3.28.3/CMakeSystem.cmake: phony
 
 
 #############################################

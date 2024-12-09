@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build"
+			"value" : "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -527,7 +527,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build/CMakeFiles/pkgRedirects"
+			"value" : "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -587,7 +587,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator"
+			"value" : "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1199,7 +1199,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator/build"
+			"value" : "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator/build"
 		},
 		{
 			"name" : "ObjectAllocator_IS_TOP_LEVEL",
@@ -1223,7 +1223,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/mnt/c/DEV/Digipen-Assignment/280/Object-Allocator"
+			"value" : "/mnt/c/Dev/Digipen-Assignment/280/Object-Allocator"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
