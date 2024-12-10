@@ -102,6 +102,7 @@ void *ObjectAllocator::Allocate([[maybe_unused]] const char *label)
 
     if (FreeList_!= nullptr)
     {
+       // std::cout<<label <<'\n';
         void *target = FreeList_;
         FreeList_=FreeList_->Next;
         Stats_.Allocations_++;
@@ -266,7 +267,7 @@ void ObjectAllocator::Free([[maybe_unused]] void *Object)
     if (FreeList_ == nullptr)
     {
         FreeList_ = reinterpret_cast<GenericObject *>(Object);
-       // FreeList_->Next = nullptr;
+        FreeList_->Next = nullptr;
 
         std::memset(FreeList_, 0xCC, Stats_.ObjectSize_);
         Stats_.Deallocations_++;

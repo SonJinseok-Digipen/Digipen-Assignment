@@ -716,7 +716,6 @@ void TestBasicHeaderBlocks()
 //****************************************************************************************************
 void TestExtendedHeaderBlocks(unsigned size)
 {
-
   ObjectAllocator *oa = 0;
   unsigned wrap = 32;
 
@@ -768,7 +767,6 @@ void TestExtendedHeaderBlocks(unsigned size)
 
   ///////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////
-  
   Student *pStudent2 = 0;
   try
   {
